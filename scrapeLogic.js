@@ -5,6 +5,7 @@ const scrapeLogic = async (res) => {
   console.error("scraper running");
 
   const browser = await puppeteer.launch({
+    headless:"new",
     args: [
       "--disable-setuid-sandbox",
       "--no-sandbox",
