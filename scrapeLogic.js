@@ -17,23 +17,28 @@ const scrapeLogic = async (res) => {
     const page = await browser.newPage();
 
     await page.goto("https://developer.chrome.com/");
+    console.error("goto running");
 
     // Set screen size
     await page.setViewport({ width: 1080, height: 1024 });
 
     // Type into search box
     await page.type(".search-box__input", "automate beyond recorder");
+    console.error("type running");
+
 
     // Wait and click on first result
     const searchResultSelector = ".search-box__link";
     await page.waitForSelector(searchResultSelector);
     await page.click(searchResultSelector);
+    console.error("click running");
 
     // Locate the full title with a unique string
     const textSelector = await page.waitForSelector(
       "text/Customize and automate"
     );
     const fullTitle = await textSelector.evaluate((el) => el.textContent);
+    console.error("fullTitle running");
 
     // Print the full title
     const logStatement = `The title of this blog post is ${fullTitle}`;
