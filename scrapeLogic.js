@@ -17,36 +17,20 @@ const scrapeLogic = async (res) => {
     //     : puppeteer.executablePath(),
   });
   try {
-    const page = await browser.newPage();
+    
+    const page = await browser.newPage()
+    await page.goto("https://webscraper.io/test-sites/e-commerce/allinone", {
+        waitUntil: "networkidle2",
+    })
+    const data = await page.evaluate(() => {
 
-    await page.goto("https://developer.chrome.com/");
-    console.error("goto running");
+           return document.querySelector("h4.float-end.price.card-title.pull-right").textContent
+            
 
-    // Set screen size
-    await page.setViewport({ width: 1080, height: 1024 });
-
-    // Type into search box
-    await page.type(".search-box__input", "automate beyond recorder");
-    console.error("type running");
-
-
-    // Wait and click on first result
-    const searchResultSelector = ".search-box__link";
-    await page.waitForSelector(searchResultSelector);
-    await page.click(searchResultSelector);
-    console.error("click running");
-
-    // Locate the full title with a unique string
-    const textSelector = await page.waitForSelector(
-      "text/Customize and automate"
-    );
-    const fullTitle = await textSelector.evaluate((el) => el.textContent);
-    console.error("fullTitle running");
-
-    // Print the full title
-    const logStatement = `The title of this blog post is ${fullTitle}`;
-    console.log(logStatement);
-    res.send(logStatement);
+    })
+    res.send(data)
+    await browser.close()
+    
   } catch (e) {
     console.error(e);
     res.send(`Something went wrong while running Puppeteer: ${e}`);
